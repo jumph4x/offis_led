@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>OFFIS LED II Control Panel</title>
+    <link href="https://offis.work/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
+
+    <script>
+      $(document).ready(function() {
+        var ip = "10.42.0.113";
+        $("#host").val(ip);
+        $(document).on('change keyup paste', '#host', (function() {
+          ip = $(this).val();
+        }));
+
+        // Enable WEBMIDI.js and trigger the onEnabled() function when ready
+        WebMidi
+          .enable()
+          .then(onEnabled)
+          .catch(err => alert(err));
+
+        var colors = {
+          '46': 19, //bisexual
+          '47': 30, //drywet
+          '48': 41 //magred
+        }
+
+        function rescale(value, newMax=255) {
+          return parseInt(newMax*value)
+        }
+
+        // Function triggered when WEBMIDI.js is ready
+        function onEnabled() {
+
+          // Display available MIDI input devices
+          if (WebMidi.inputs.length < 1) {
+            document.body.innerHTML+= "No device detected.";
+          } else {
+            WebMidi.inputs.forEach((device, index) => {
+              document.body.innerHTML+= `${index}: ${device.name} <br>`;
+            });
+          }
+
+          const mySynth = WebMidi.inputs[0];
+          // const mySynth = WebMidi.getInputByName("TYPE NAME HERE!")
+          
+          mySynth.channels[1].addListener("noteon", e => {
+            console.log `${e.note.name}`;
+          });
+
+          var inProgress = false;
+
+          mySynth.channels[1].addListener("controlchange", e => {
+            console.log `${e.subtype}`;
+            console.log `${e.value}`;
+
+            var endpoint = "http://" + ip + "/json/state";
+
+            var state = 
+            {
+              "seg": {
+                "bri": rescale(e.value)
+              },
+              "state": {
+                "tt": 0
+              }
+            }
+
+            if (!inProgress || e.value == 0){
+              $.ajax({
+                dataType: "json",
+                url: endpoint,
+                data: JSON.stringify(state),
+                method: "POST",
+                beforeSend: function(){
+                  inProgress = true;
+                },
+                complete: function(){
+                  inProgress = false;
+                },
+                contentType: 'application/json'
+              });
+            } else {
+              console.log('network request in progress, skipping');
+            }
+
+          });
+
+        }
+      })
+
+
+    </script>
+  </head>
+  
+  <body>
+    <h1>OFFIS LED II Control Panel</h1>
+    <label for="host">Host</label>
+    <input id="host" type="text" />
+
+  </body>
+
+</html>
