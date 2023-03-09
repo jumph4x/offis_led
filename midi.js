@@ -26,26 +26,72 @@ $(document).ready(function() {
       success: function(data){
         info = data;
         console.log(info);
+        printSummary(data);
       },
       contentType: 'application/json'
     });
   }
 
-  var colors = {
-    '46': 19, //bisexual
-    '47': 30, //drywet
-    '48': 41 //magred
-  }
-
   var rotaryMap = {
-    'volumecoarse': 'bri',
-    '3':            'sx',
-    '9':            'ix'
+    '14': 'bri',
+    '15': 'sx',
+    '16': 'ix',
+    '17': 'transition'
   }
 
   var effects = {
-    '46': {fx: 0},
-    '47': {fx: 2}
+    105: '~-',
+    106: '~',
+    46: 0,
+    47: 2,
+    48: 3,
+    49: 12,
+    50: 16,
+    51: 23,
+    52: 41,
+    53: 44,
+    54: 72,
+    55: 129,
+    56: 134,
+    57: 93,
+    58: 21
+  }
+
+  var colorValues = [100, 0, 0, 0, 0, 0, 0, 0, 0]
+
+  var colorMap = {
+    19: 0,
+    20: 1,
+    21: 2,
+    23: 3,
+    24: 4,
+    25: 5,
+    27: 6,
+    28: 7,
+    29: 8
+  }
+
+  function printSummary(info) {
+    fxIndex = info['state']['seg'][0]['fx'];
+    updateFx(fxIndex);
+
+
+    palIndex = info['state']['seg'][0]['pal'];
+    updatePal(palIndex);
+
+    return null;
+  }
+
+  function updatePal(index){
+    value = `${index}: ${info['palettes'][index]}`
+    $("#pal").val(value);
+    console.log(`Palette ${value}`);
+  }
+
+  function updateFx(index){
+    value = `${index}: ${info['effects'][index]}`
+    $("#fx").val(value);
+    console.log(`FX ${value}`);
   }
 
   function rescale(value, newMax=255) {
@@ -54,19 +100,37 @@ $(document).ready(function() {
 
   function rotaryControl(command,value){
     change = {}
-    mapping = rotaryMap[command] || rotaryMap[command.replace('controller','')];
+    mapping = rotaryMap[command];
     if(mapping){
       change[mapping] = rescale(value);
       return {seg: change};
+
+    // color controls
+    }else if (command in colorMap){
+
+      colorValues[colorMap[command]] = Math.round(rescale(value));
+      console.log(colorValues);
+
+      state = {
+        seg: {
+          col: [
+            colorValues.slice(0,3),
+            colorValues.slice(3,6),
+            colorValues.slice(6,9)
+          ]
+        }
+      }
+      return state;
     }else{
       return null;
     }
   }
 
   function triggerControl(command){
-    mapping = effects[command.replace('controller','')];
-    if(mapping){
-      return {seg: mapping};
+    mapping = effects[command];
+    if(command in effects){
+      updateFx(mapping);
+      return {seg: {fx: mapping}};
     }else{
       return null;
     }
@@ -94,6 +158,7 @@ $(document).ready(function() {
         state =  {
           seg: {pal: value}
         }
+        updatePal(value);
         return sendRequest(state, false);
       }
       return null;
@@ -102,15 +167,22 @@ $(document).ready(function() {
     var inProgress = false;
 
     mySynth.channels[1].addListener("controlchange", e => {
-      console.log `${e.subtype}`;
+      console.log `${e.type}`;
       console.log `${e.value}`;
+      console.log `${e}`;
+      var index = e.rawData[1];
 
-      var state = rotaryControl(e.subtype, e.value);
+      // diagnostic request for state
+      if(index == 85){
+        return getInfo();
+      }
+
+      var state = rotaryControl(index, e.value);
       if (state){
         return sendRequest(state, e.value != 0);
       }
 
-      state = triggerControl(e.subtype);
+      state = triggerControl(index);
       if (state){
         return sendRequest(state, false);
       }
