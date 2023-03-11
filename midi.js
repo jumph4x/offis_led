@@ -5,18 +5,18 @@ $(document).ready(function() {
     .then(onEnabled)
     .catch(err => alert(err));
 
-  var ip = "10.42.0.113";
-  var endpoint = "http://" + ip + "/json";
+  var ips = ["10.42.0.113","10.42.0.19","10.42.0.42","10.42.0.212"];
+  var endpoint = "http://" + ips[0] + "/json";
   var info =  {};
-  $("#host").val(ip);
+  $("#ips").val(ips.join("\n"));
 
-  $(document).on('change keyup paste', '#host', (function() {
-    ip = $(this).val();
-    endpoint = "http://" + ip + "/json";
+  $(document).on('change keyup paste', '#ips', (function() {
+    ips = $(this).val().split(/,|\n/);
+    endpoint = "http://" + ips[0] + "/json";
     getInfo();
   }));
 
-  $("#host").change();
+  $("#ips").change();
 
   function getInfo(){
     $.ajax({
@@ -38,7 +38,6 @@ $(document).ready(function() {
     fxIndex = info['state']['seg'][0]['fx'];
     updateFx(fxIndex);
 
-
     palIndex = info['state']['seg'][0]['pal'];
     updatePal(palIndex);
 
@@ -46,13 +45,23 @@ $(document).ready(function() {
   }
 
   function updatePal(index){
-    value = `${index}: ${info['palettes'][index]}`
+    if(index == null){
+      value = `Macro sent last`
+    }else{
+      value = `${index}: ${info['palettes'][index]}`
+    }
+    
     $("#pal").val(value);
     console.log(`Palette ${value}`);
   }
 
   function updateFx(index){
-    value = `${index}: ${info['effects'][index]}`
+    if(index == null){
+      value = `Macro sent last`
+    }else{
+      value = `${index}: ${info['effects'][index]}`
+    }
+  
     $("#fx").val(value);
     console.log(`FX ${value}`);
   }
@@ -227,7 +236,7 @@ $(document).ready(function() {
       return null;
     });
 
-    var inProgress = false;
+    
 
     mySynth.channels[1].addListener("controlchange", e => {
       console.log `${e.type}`;
@@ -252,6 +261,9 @@ $(document).ready(function() {
       }
 
       if(index in macros){
+        updateFx();
+        updatePal();
+        
         states = macros[index];
         sendRequest(states[0], false);
         setTimeout(function() {
@@ -260,23 +272,36 @@ $(document).ready(function() {
       }
     });
 
+    var inProgress = false;
+    var requestCompletion = [];
+
     function sendRequest(state, wait){
+      
       if (!wait || (!inProgress && wait)){
-        $.ajax({
-          dataType: "json",
-          url: endpoint,
-          data: JSON.stringify(state),
-          method: "POST",
-          beforeSend: function(){
-            inProgress = true;
-          },
-          complete: function(){
-            inProgress = false;
-          },
-          contentType: 'application/json'
+        inProgress = true;
+
+        $.each(ips, function(index, ip) {
+          var address = "http://" + ips[index] + "/json";
+
+          $.ajax({
+            dataType: "json",
+            url: address,
+            data: JSON.stringify(state),
+            method: "POST",
+            beforeSend: function(){
+              requestCompletion[index] = 0;
+            },
+            complete: function(){
+              requestCompletion[index] = 1;
+              if (requestCompletion.every( e  => e == 1)){
+                inProgress = false
+              }
+            },
+            contentType: 'application/json'
+          });
         });
       } else {
-        console.log('network request in progress, skipping');
+        console.log('network requests in progress, skipping');
       }
     }
 
