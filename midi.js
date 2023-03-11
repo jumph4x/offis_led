@@ -188,10 +188,6 @@ $(document).ready(function() {
     return null;
   }
 
-  // function constructState(command, value){
-  //   return rotaryControl(command,value) || triggerControl(command);
-  // }
-
   // Function triggered when WEBMIDI.js is ready
   function onEnabled() {
 
@@ -216,7 +212,24 @@ $(document).ready(function() {
       return null;
     });
 
-    
+    var macros = {
+      63: [
+        {
+          tt: 0,
+          seg:{
+            col: [[255,255,255],[0,0,0],[0,0,0]],
+            fx: 0
+          }
+        },
+        {
+          tt: 2,
+          seg:{
+            col: [[0,0,0],[0,0,0],[0,0,0]],
+            fx: 0
+          }
+        }
+      ]
+    }
 
     mySynth.channels[1].addListener("controlchange", e => {
       console.log `${e.type}`;
