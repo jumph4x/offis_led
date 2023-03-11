@@ -381,7 +381,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -392,7 +392,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -403,7 +403,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -414,7 +414,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -437,7 +437,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -448,7 +448,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -459,7 +459,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -556,7 +556,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -567,7 +567,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -578,7 +578,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -601,7 +601,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -612,7 +612,7 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
@@ -623,14 +623,14 @@
           <min>0</min>
           <max>127</max>
           <default>0</default>
-          <range>360</range>
+          <range>180</range>
           <steps>20</steps>
           <bipolar>off</bipolar>
         </knob>
       </page>
     </pages>
     <groups>
-      <current_index>0</current_index>
+      <current_index>4</current_index>
       <group name="Pad Page A">
         <pad subtype="trigger" version="1" id="Pad1">
           <note>12</note>

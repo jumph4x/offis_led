@@ -33,7 +33,6 @@ $(document).ready(function() {
   }
 
   var rotaryMap = {
-    '14': 'bri',
     '15': 'sx',
     '16': 'ix',
     '17': 'transition'
@@ -54,7 +53,7 @@ $(document).ready(function() {
     55: 129,
     56: 134,
     57: 93,
-    58: 21
+    58: 21,
   }
 
   var colorValues = [100, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -101,7 +100,10 @@ $(document).ready(function() {
   function rotaryControl(command,value){
     change = {}
     mapping = rotaryMap[command];
-    if(mapping){
+    // brightness needs not be scoped to a segment
+    if(command == 14){
+      return {bri: rescale(value)};
+    }else if(mapping){
       change[mapping] = rescale(value);
       return {seg: change};
 
