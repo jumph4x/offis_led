@@ -143,12 +143,12 @@
         <reaction>ondown</reaction>
       </button>
       <button version="1" id="Loop">
-        <disabled />
+        <name>REBOOT</name>
         <controller>104</controller>
         <channel>0</channel>
         <off>0</off>
         <on>127</on>
-        <behavior onIfDown="on">toggle</behavior>
+        <behavior onIfDown="on">trigger</behavior>
         <reaction>ondown</reaction>
       </button>
       <button version="1" id="Mute">
@@ -188,11 +188,11 @@
         <reaction>ondown</reaction>
       </button>
       <button version="1" id="Play">
-        <disabled />
+        <name>On/Off</name>
         <controller>108</controller>
         <channel>0</channel>
         <off>0</off>
-        <on>127</on>
+        <on>1</on>
         <behavior onIfDown="on">toggle</behavior>
         <reaction>ondown</reaction>
       </button>
@@ -206,6 +206,7 @@
         <reaction>ondown</reaction>
       </button>
       <button version="1" id="Record">
+        <name>FREEZE</name>
         <disabled />
         <controller>109</controller>
         <channel>0</channel>
@@ -215,6 +216,7 @@
         <reaction>ondown</reaction>
       </button>
       <button version="1" id="Repeat">
+        <name>FADE</name>
         <disabled />
         <controller>111</controller>
         <channel>0</channel>
@@ -269,6 +271,7 @@
         <reaction>ondown</reaction>
       </button>
       <knob version="1" id="Swing">
+        <disabled />
         <controller>9</controller>
         <channel>0</channel>
         <min>0</min>
@@ -279,6 +282,7 @@
         <bipolar>off</bipolar>
       </knob>
       <knob version="1" id="Tempo">
+        <disabled />
         <controller>3</controller>
         <channel>0</channel>
         <min>0</min>
@@ -289,6 +293,7 @@
         <bipolar>off</bipolar>
       </knob>
       <knob version="1" id="Volume">
+        <disabled />
         <controller>7</controller>
         <channel>0</channel>
         <min>0</min>
@@ -300,7 +305,7 @@
       </knob>
     </controls>
     <pages>
-      <current_index>1</current_index>
+      <current_index>2</current_index>
       <page name="EFFECTS 1">
         <button version="1" id="Button1">
           <name>Solid</name>
@@ -412,7 +417,7 @@
           <controller>17</controller>
           <channel>0</channel>
           <min>0</min>
-          <max>127</max>
+          <max>32</max>
           <default>0</default>
           <range>180</range>
           <steps>20</steps>
@@ -628,9 +633,164 @@
           <bipolar>off</bipolar>
         </knob>
       </page>
+      <page name="MACROS 1">
+        <button version="1" id="Button1">
+          <name>FLASH</name>
+          <controller>63</controller>
+          <channel>0</channel>
+          <off>0</off>
+          <on>127</on>
+          <behavior onIfDown="on">trigger</behavior>
+          <reaction>ondown</reaction>
+        </button>
+        <button version="1" id="Button2">
+          <controller>64</controller>
+          <channel>0</channel>
+          <off>0</off>
+          <on>127</on>
+          <behavior onIfDown="on">trigger</behavior>
+          <reaction>ondown</reaction>
+        </button>
+        <button version="1" id="Button3">
+          <controller>65</controller>
+          <channel>0</channel>
+          <off>0</off>
+          <on>127</on>
+          <behavior onIfDown="on">trigger</behavior>
+          <reaction>ondown</reaction>
+        </button>
+        <button version="1" id="Button4">
+          <controller>66</controller>
+          <channel>0</channel>
+          <off>0</off>
+          <on>127</on>
+          <behavior onIfDown="on">trigger</behavior>
+          <reaction>ondown</reaction>
+        </button>
+        <button version="1" id="Button5">
+          <controller>67</controller>
+          <channel>0</channel>
+          <off>0</off>
+          <on>127</on>
+          <behavior onIfDown="on">trigger</behavior>
+          <reaction>ondown</reaction>
+        </button>
+        <button version="1" id="Button6">
+          <controller>68</controller>
+          <channel>0</channel>
+          <off>0</off>
+          <on>127</on>
+          <behavior onIfDown="on">trigger</behavior>
+          <reaction>ondown</reaction>
+        </button>
+        <button version="1" id="Button7">
+          <controller>69</controller>
+          <channel>0</channel>
+          <off>0</off>
+          <on>127</on>
+          <behavior onIfDown="on">trigger</behavior>
+          <reaction>ondown</reaction>
+        </button>
+        <button version="1" id="Button8">
+          <controller>70</controller>
+          <channel>0</channel>
+          <off>0</off>
+          <on>127</on>
+          <behavior onIfDown="on">trigger</behavior>
+          <reaction>ondown</reaction>
+        </button>
+        <knob version="1" id="Knob1">
+          <disabled />
+          <controller>14</controller>
+          <channel>0</channel>
+          <min>0</min>
+          <max>127</max>
+          <default>0</default>
+          <range>360</range>
+          <steps>20</steps>
+          <bipolar>off</bipolar>
+        </knob>
+        <knob version="1" id="Knob2">
+          <disabled />
+          <controller>15</controller>
+          <channel>0</channel>
+          <min>0</min>
+          <max>127</max>
+          <default>0</default>
+          <range>360</range>
+          <steps>20</steps>
+          <bipolar>off</bipolar>
+        </knob>
+        <knob version="1" id="Knob3">
+          <disabled />
+          <controller>16</controller>
+          <channel>0</channel>
+          <min>0</min>
+          <max>127</max>
+          <default>0</default>
+          <range>360</range>
+          <steps>20</steps>
+          <bipolar>off</bipolar>
+        </knob>
+        <knob version="1" id="Knob4">
+          <disabled />
+          <controller>17</controller>
+          <channel>0</channel>
+          <min>0</min>
+          <max>127</max>
+          <default>0</default>
+          <range>360</range>
+          <steps>20</steps>
+          <bipolar>off</bipolar>
+        </knob>
+        <knob version="1" id="Knob5">
+          <disabled />
+          <controller>18</controller>
+          <channel>0</channel>
+          <min>0</min>
+          <max>127</max>
+          <default>0</default>
+          <range>360</range>
+          <steps>20</steps>
+          <bipolar>off</bipolar>
+        </knob>
+        <knob version="1" id="Knob6">
+          <disabled />
+          <controller>19</controller>
+          <channel>0</channel>
+          <min>0</min>
+          <max>127</max>
+          <default>0</default>
+          <range>360</range>
+          <steps>20</steps>
+          <bipolar>off</bipolar>
+        </knob>
+        <knob version="1" id="Knob7">
+          <disabled />
+          <controller>20</controller>
+          <channel>0</channel>
+          <min>0</min>
+          <max>127</max>
+          <default>0</default>
+          <range>360</range>
+          <steps>20</steps>
+          <bipolar>off</bipolar>
+        </knob>
+        <knob version="1" id="Knob8">
+          <disabled />
+          <controller>21</controller>
+          <channel>0</channel>
+          <min>0</min>
+          <max>127</max>
+          <default>0</default>
+          <range>360</range>
+          <steps>20</steps>
+          <bipolar>off</bipolar>
+        </knob>
+      </page>
     </pages>
     <groups>
-      <current_index>4</current_index>
+      <current_index>3</current_index>
       <group name="Pad Page A">
         <pad subtype="trigger" version="1" id="Pad1">
           <note>12</note>

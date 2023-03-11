@@ -32,43 +32,7 @@ $(document).ready(function() {
     });
   }
 
-  var rotaryMap = {
-    '15': 'sx',
-    '16': 'ix',
-    '17': 'transition'
-  }
 
-  var effects = {
-    105: '~-',
-    106: '~',
-    46: 0,
-    47: 2,
-    48: 3,
-    49: 12,
-    50: 16,
-    51: 23,
-    52: 41,
-    53: 44,
-    54: 72,
-    55: 129,
-    56: 134,
-    57: 93,
-    58: 21,
-  }
-
-  var colorValues = [100, 0, 0, 0, 0, 0, 0, 0, 0]
-
-  var colorMap = {
-    19: 0,
-    20: 1,
-    21: 2,
-    23: 3,
-    24: 4,
-    25: 5,
-    27: 6,
-    28: 7,
-    29: 8
-  }
 
   function printSummary(info) {
     fxIndex = info['state']['seg'][0]['fx'];
@@ -97,18 +61,54 @@ $(document).ready(function() {
     return parseInt(newMax*value)
   }
 
+  function translateBool(value){
+    if(value == 0 ){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+  var colorValues = [100, 0, 0, 0, 0, 0, 0, 0, 0]
+
+  var colorMap = {
+    19: 0,
+    20: 1,
+    21: 2,
+    23: 3,
+    24: 4,
+    25: 5,
+    27: 6,
+    28: 7,
+    29: 8
+  }
+
+  var rotaryMap = {
+    '14': 'bri',
+    '17': 'transition'
+  }
+
+  var segmentRotaryMap = {
+    '15': 'sx',
+    '16': 'ix'
+  }
+
   function rotaryControl(command,value){
     change = {}
-    mapping = rotaryMap[command];
-    // brightness needs not be scoped to a segment
-    if(command == 14){
-      return {bri: rescale(value)};
-    }else if(mapping){
-      change[mapping] = rescale(value);
-      return {seg: change};
+    mapping = segmentRotaryMap[command];
 
-    // color controls
-    }else if (command in colorMap){
+    if(mapping){
+      change[mapping] = rescale(value)
+      return {seg: change};
+    }
+
+    mapping = rotaryMap[command];
+    if(mapping){
+      change[mapping] = rescale(value);
+      return change;
+    }
+
+    if (command in colorMap){
 
       colorValues[colorMap[command]] = Math.round(rescale(value));
       console.log(colorValues);
@@ -128,14 +128,75 @@ $(document).ready(function() {
     }
   }
 
-  function triggerControl(command){
-    mapping = effects[command];
+  var effects = {
+    105: '~-',
+    106: '~',
+    46: 0,
+    47: 2,
+    48: 3,
+    49: 12,
+    50: 16,
+    51: 23,
+    52: 41,
+    53: 44,
+    54: 72,
+    55: 129,
+    56: 134,
+    57: 93,
+    58: 21
+  }
+
+  var booleanTriggers = {
+    108: 'on',
+    104: 'rb'
+  }
+
+  // Unfortunately only taargets the primary segment
+  // var segmentBooleanTriggers = {
+  //   109: 'frz'
+  // }
+
+  var macros = {
+    63: [
+      {
+        tt: 0,
+        seg:{
+          col: [[255,255,255],[0,0,0],[0,0,0]],
+          fx: 0
+        }
+      },
+      {
+        tt: 2,
+        seg:{
+          col: [[0,0,0],[0,0,0],[0,0,0]],
+          fx: 0
+        }
+      }
+    ]
+  }
+
+  function triggerControl(command, value){
     if(command in effects){
+      mapping = effects[command];
       updateFx(mapping);
       return {seg: {fx: mapping}};
-    }else{
-      return null;
     }
+
+    if(command in booleanTriggers){
+      var change = {};
+      mapping = booleanTriggers[command];
+      change[mapping] = translateBool(value);
+      return change;
+    }
+
+    // if(command in segmentBooleanTriggers){
+    //   var change = {};
+    //   mapping = segmentBooleanTriggers[command];
+    //   change[mapping] = translateBool(value);
+    //   return {seg: change, 'udpn.send': true};
+    // }
+
+    return null;
   }
 
   // function constructState(command, value){
@@ -173,6 +234,7 @@ $(document).ready(function() {
       console.log `${e.value}`;
       console.log `${e}`;
       var index = e.rawData[1];
+      var rawValue = e.rawData[2];
 
       // diagnostic request for state
       if(index == 85){
@@ -184,9 +246,17 @@ $(document).ready(function() {
         return sendRequest(state, e.value != 0);
       }
 
-      state = triggerControl(index);
+      state = triggerControl(index, rawValue);
       if (state){
         return sendRequest(state, false);
+      }
+
+      if(index in macros){
+        states = macros[index];
+        sendRequest(states[0], false);
+        setTimeout(function() {
+          sendRequest(states[1], false);
+        }, 50)
       }
     });
 
