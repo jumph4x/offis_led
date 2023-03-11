@@ -160,28 +160,8 @@ $(document).ready(function() {
     104: 'rb'
   }
 
-  // Unfortunately only taargets the primary segment
-  // var segmentBooleanTriggers = {
-  //   109: 'frz'
-  // }
-
-  var macros = {
-    63: [
-      {
-        tt: 0,
-        seg:{
-          col: [[255,255,255],[0,0,0],[0,0,0]],
-          fx: 0
-        }
-      },
-      {
-        tt: 2,
-        seg:{
-          col: [[0,0,0],[0,0,0],[0,0,0]],
-          fx: 0
-        }
-      }
-    ]
+  var segmentBooleanTriggers = {
+    109: 'frz'
   }
 
   function triggerControl(command, value){
@@ -198,12 +178,12 @@ $(document).ready(function() {
       return change;
     }
 
-    // if(command in segmentBooleanTriggers){
-    //   var change = {};
-    //   mapping = segmentBooleanTriggers[command];
-    //   change[mapping] = translateBool(value);
-    //   return {seg: change, 'udpn.send': true};
-    // }
+    if(command in segmentBooleanTriggers){
+      var change = {};
+      mapping = segmentBooleanTriggers[command];
+      change[mapping] = translateBool(value);
+      return {seg: change};
+    }
 
     return null;
   }
@@ -263,7 +243,7 @@ $(document).ready(function() {
       if(index in macros){
         updateFx();
         updatePal();
-        
+
         states = macros[index];
         sendRequest(states[0], false);
         setTimeout(function() {
