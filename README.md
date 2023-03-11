@@ -21,3 +21,7 @@ Gotchas
 =======
 
 ESP32s are a bit quicker than ESP8266s, so for synchronization's sake I ended up setting ESP32 target FPS to 60 and ESP8266 units to 65.
+
+Maschine Layout
+===============
+![image](https://user-images.githubusercontent.com/109290/224513515-4c68e0b3-52c0-43da-83dc-41be35f69926.png)
