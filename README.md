@@ -25,3 +25,8 @@ ESP32s are a bit quicker than ESP8266s, so for synchronization's sake I ended up
 Maschine Layout
 ===============
 ![image](https://user-images.githubusercontent.com/109290/224513515-4c68e0b3-52c0-43da-83dc-41be35f69926.png)
+
+Basic HTML
+==========
+
+![image](https://user-images.githubusercontent.com/109290/224513781-b74b8393-ec8d-4f9f-9e48-c3649df486e2.png)
